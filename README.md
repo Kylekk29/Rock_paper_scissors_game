@@ -1,32 +1,44 @@
-Here is a simple instruction for the provided Python file:
+# Rock-Paper-Scissors Game with Hand Gesture Recognition
 
-### Instructions for Running the Rock-Paper-Scissors Game with Hand Gestures
+## Introduction
 
-1. **Install Required Libraries**:
-   Make sure you have the necessary libraries installed. You can do this using pip:
+This project implements a Rock-Paper-Scissors game using hand gesture recognition. The game detects hand signs through a webcam and allows a user to play against a computer opponent. The hand gestures are processed in real-time using OpenCV and MediaPipe libraries. 
+
+## Features
+
+- **Hand Gesture Recognition**: Detects and processes hand gestures for rock, paper, or scissors.
+- **Real-Time Feedback**: Displays the current frames per second (FPS) and game results on the screen.
+- **Statistics Tracking**: Keeps track of wins, losses, and total rounds played.
+- **User Instructions**: Provides clear instructions on how to start and quit the game.
+
+## Requirements
+
+- Python 3.12
+- OpenCV (`cv2`)
+- MediaPipe (`mediapipe`)
+- NumPy (for array manipulations)
+
+## How to Run
+
+1. Ensure you have the required libraries installed:
    ```bash
-   pip install opencv-python mediapipe
+   pip install opencv-python mediapipe numpy
    ```
 
-2. **Connect Your Camera**:
-   Ensure your webcam is connected and recognized by your computer.
+2. Connect a webcam to your computer.
 
-3. **Run the Script**:
-   Execute the script by running:
+3. Run the script:
    ```bash
-   python main.py
+   python your_script_name.py
    ```
 
-4. **Game Controls**:
-   - **Press `d`**: Start the game and make a hand gesture (rock, paper, or scissors).
-   - **Press `q`**: Quit the game.
+4. Press `d` to play the game and `q` to quit.
 
-5. **Hand Gestures**:
-   - **Rock**: All fingers curled down.
-   - **Paper**: Hand flat with fingers extended.
-   - **Scissors**: Two fingers extended (like a peace sign).
+## Usage
 
-6. **View Results**:
-   The game will display your choice, the computer's choice, and your win/loss statistics on the screen.
+- Make hand gestures in front of the camera to play the game.
+- The game will display the computer's choice, your choice, and the outcome of each round along with your win percentage.
 
-Enjoy playing!
+## License
+
+This project is open source and available under the MIT License.
