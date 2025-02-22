@@ -16,7 +16,7 @@ def get_fps(frame, imagewidth):
     global current_time
     global pervious_time
     current_time = time.time()
-    fps = 1/(current_time-pervious_time)#Calculate the FPS by using the difference of time between each run of while loop of programe
+    fps = 1/(current_time-pervious_time)#Calculate the FPS by using the difference of time between each run of while loop of program
     pervious_time = time.time()#Reset the pervious time to the current time for the next run
     #show the FPS
     cv2.putText(frame, f'FPS:{int(fps)}', (imagewidth-150,50), cv2.FONT_HERSHEY_COMPLEX, 0.8, (0,0,255), 1)
@@ -35,22 +35,21 @@ def draw_hand_utils(frame, result):
                 if i == 4 or i == 8 or i == 12 or i == 16 or i == 20:
                     cv2.circle(frame, (xpos, ypos), 7, (0, 255, 255), cv2.FILLED)
                 #Highlight the main detect point by adding a yellow circle above it
-            handsign = getHandMove(handlankmark) 
-            #Because need the all 21 data so need to run in this intention for the variable that store the 21 point data
-            return handsign
-def getHandMove(handlankmark):
-    eachlandmark = handlankmark.landmark
+def getHandMove(result):
+    if result.multi_hand_landmarks:
+        for handlankmark in result.multi_hand_landmarks:
+            eachlandmark = handlankmark.landmark
     #The eachlandmarks here is a ratio of x y axis but enough for determine the handsign
     #The three conditions to determine the type of handsign by comparing the y asis of the required handlandmarks
-    if all([eachlandmark[i].y< eachlandmark[i+3].y for i in range(9, 20, 4)]):
-        handsign = 'rock'
-    elif eachlandmark[13].y < eachlandmark[16].y and eachlandmark[17].y < eachlandmark[20].y:
-        handsign = 'scissors'
-    elif eachlandmark[4].y < eachlandmark[0].y and eachlandmark[8].y < eachlandmark[0].y: 
-        handsign = 'paper'
-    else:
-        handsign = 'Error'
-    return handsign #Return the handsign to the main function
+            if all([eachlandmark[i].y< eachlandmark[i+3].y for i in range(9, 20, 4)]):
+                handsign = 'rock'
+            elif eachlandmark[13].y < eachlandmark[16].y and eachlandmark[17].y < eachlandmark[20].y:
+                handsign = 'scissors'
+            elif eachlandmark[4].y < eachlandmark[0].y and eachlandmark[8].y < eachlandmark[0].y: 
+                handsign = 'paper'
+            else:
+                handsign = 'Error'
+        return handsign #Return the handsign to the main function
 def computer_random_choice():#Use a random package function to get a random choice of the computer
     choice_list = ['rock', 'paper', 'scissors']
     computer_choice_int = random.randint(0, 2)
@@ -77,14 +76,14 @@ def player_win_loss(computer_choice, handsign):#The all conditions to determine 
     else:
         player_result = 3        
     return player_result
-def result_status_and_data_count():#Change the result of the player to the str type and calculate the statistics
-    global strresult_statistics_status 
+def result_status_and_statistics():#Change the result of the player to the str type and calculate the statistics
+    global str_result_statistics_status 
     global win_round
     global total_round
     if player_result == 3:
         return "Error"
     else:
-        strresult_statistics_status = True
+        str_result_statistics_status = True
         total_round +=1
         if player_result == 0:
             return "You lose "
@@ -95,7 +94,7 @@ def result_status_and_data_count():#Change the result of the player to the str t
             return 'You win'
     
 def put_result(result_player_str):
-    if strresult_statistics_status == True: #If the calculation of the statistics is started
+    if str_result_statistics_status == True: #If the calculation of the statistics is started
         cv2.putText(frame, f'Computer choice: {computer_choice}', (10,50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255), 1)
         if result_player_str != 0 :
             cv2.putText(frame, result_player_str, (10,80), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255), 1)
@@ -108,18 +107,17 @@ def put_result(result_player_str):
 def put_rule():#Show how to quit and start
     cv2.putText(frame, 'Press d to play', (10,200), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255), 1)
     cv2.putText(frame, 'Press q to quit', (10,230), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255), 0)
-strresult_statistics_status=False #Set the status of the game to Fasle
+str_result_statistics_status=False #Set the status of the game to Fasle
 total_score=0 #For calculate the statistics in function put_result
 total_round=0 #For calculate the statistics in function put_result
 win_round=0 #For calculate the statistics in function put_result
-pervious_time = 0 #Calculate the FPS by using the difference of time between each run of while loop of programe
+pervious_time = 0 #Calculate the FPS by using the difference of time between each run of while loop of program
 current_time = 0
 result_player_str = 0 #Initials the str type of result of player need to show
 while(True):
-    #get hand sign start
     handsign = 0 #Initials the handsign result after the processing of 
-    ret, frame = cap.read()  #ret is test is image is read, the frame store the image
-    framewidth = 1280#The width of frame to br resized
+    ret, frame = cap.read()  #ret is test is image is read, the frame store the image that captured by the camera
+    framewidth = 1280#The width of frame to be resized
     frameheight = 720#The height of frame to be resized
     frame = cv2.resize(frame, (framewidth, frameheight)) #resize the frame to the setted value 
     frame = cv2.flip(frame, 1)#Flip the image(laterally invert)for better user experience 
@@ -130,15 +128,15 @@ while(True):
         break
     result_hand_pos_point = get_hand__point_position(frame)#Give the frame to the function and 
     #return the result after the process
-    handsign = draw_hand_utils(frame, result_hand_pos_point)
-    #print(handsign)
+    draw_hand_utils(frame, result_hand_pos_point)
+    handsign = getHandMove(result_hand_pos_point)#Get the handsign
     get_fps(frame, imagewidth)#Show the FPS on the image
     if cv2.waitKey(1) & 0xFF == ord('q'):#press q to quit
         break
     if  cv2.waitKey(20) & 0xFF == ord('d'):#press d to play the game
         computer_choice = computer_random_choice()#Get the computer choice
         player_result = player_win_loss(computer_choice, handsign)#Get the player result
-        result_player_str = result_status_and_data_count()#Get the player result in str type and calculate the statistics
+        result_player_str = result_status_and_statistics()#Get the player result in str type and calculate the statistics
     
     put_result(result_player_str)#Show the result on the image
     put_rule()#Show info
