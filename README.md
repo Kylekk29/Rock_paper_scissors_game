@@ -29,7 +29,7 @@ This project implements a Rock-Paper-Scissors game using hand gesture recognitio
 
 3. Run the script:
    ```bash
-   python your_script_name.py
+   python main.py
    ```
 
 4. Press `d` to play the game and `q` to quit.
