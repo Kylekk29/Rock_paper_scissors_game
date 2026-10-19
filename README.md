@@ -1,101 +1,49 @@
-# Rock-Paper-Scissors Game with Real-Time Hand Gesture Recognition
+# Rock Paper Scissors
 
-A fun and interactive implementation of the classic Rock-Paper-Scissors game, allowing a user to play against the computer using **hand gestures** captured through a webcam. This project leverages computer vision to provide a hands-free gaming experience.
+Three versions of the classic game, from simplest to most advanced. All three are available as ready-to-run Windows programs on the [Releases page](https://github.com/Kylekk29/Rock_paper_scissors_game/releases).
 
------
+| Folder | Version | Entry point | Windows download |
+|---|---|---|---|
+| `Rock_Paper_Scissors_Game_CLI/` | Command line | `CLI.py` | `RockPaperScissors-CLI.exe` |
+| `Rock_Paper_Scissors_Game_GUI/` | Tkinter window | `GUI.py` | `RockPaperScissors-GUI.exe` |
+| `Rock_Paper_Scissors_Game_hand/` | Webcam hand-gesture game (OpenCV + MediaPipe) | `main.py` | `RockPaperScissors-Hand.exe` |
 
-## ✨ Features
+## Run from source
 
-  * **Real-Time Hand Gesture Recognition:** Accurately detects and classifies the user's hand sign (Rock, Paper, or Scissors) using the MediaPipe framework.
-  * **Interactive Gameplay:** Provides real-time visual feedback, displaying both the user's and the computer's choice.
-  * **Performance Metrics:** Displays the current Frames Per Second (**FPS**) to monitor performance.
-  * **Statistics Tracking:** Persistent tracking of the user's score, including **Wins, Losses, Total Rounds**, and a calculated **Win Percentage**.
-  * **User-Friendly Controls:** Simple keyboard commands to start and quit the game.
-
------
-
-## 🛠️ Requirements & Installation
-
-This project requires **Python 3.12** or newer and a connected webcam.
-
-### 1\. Installation
-
-Install the required Python packages using `pip`. The project relies on OpenCV for video processing and MediaPipe for hand tracking.
+The CLI and GUI versions need only Python 3 (the GUI uses the built-in `tkinter`).
 
 ```bash
-pip install opencv-python mediapipe numpy
+python Rock_Paper_Scissors_Game_CLI/CLI.py
+python Rock_Paper_Scissors_Game_GUI/GUI.py
 ```
 
-### 2\. How to Run
-
-1.  Ensure your webcam is connected and working.
-2.  Run the main Python script from your terminal:
-
-<!-- end list -->
+The hand-gesture version needs a webcam and the packages in `requirements.txt`:
 
 ```bash
-python main.py
+pip install -r requirements.txt
+python Rock_Paper_Scissors_Game_hand/main.py
 ```
 
------
+Press `d` to play a round and `q` to quit. See [`Rock_Paper_Scissors_Game_hand/README.md`](Rock_Paper_Scissors_Game_hand/README.md) for details. It reads the default camera (index 0).
 
-## 🎮 Usage
+## Hand-gesture version
 
-Once the script is running and your webcam feed appears:
+Play against the computer using hand gestures captured through your webcam:
 
-| Action | Key Press |
-| :--- | :--- |
-| **Start/Play** | `d` (for "detect" or "deal") |
-| **Quit Game** | `q` (for "quit") |
+- Real-time rock / paper / scissors recognition with MediaPipe hand landmarks
+- On-screen FPS counter
+- Running statistics: wins, losses, total rounds and win percentage
 
-Make your hand gesture clearly in front of the camera. The game will automatically detect your choice, display the computer's choice, and announce the winner of the round.
+## Build the executables yourself
 
------
-
-## 💻 Project Structure
-
-The core logic is contained within a single file.
-
-| File | Description |
-| :--- | :--- |
-| `main.py` | Contains all the game logic, webcam capture, hand detection (MediaPipe), gesture classification, and score tracking. |
-| `README.md` | This file. |
-
------
-
-## 🔍 Code Deep Dive (How It Works)
-
-*(**NOTE:** I could not retrieve the source code, so the sections below are placeholders based on the necessary implementation details. You should fill in the specifics.)*
-
-### Hand Gesture Logic
-
-The project uses MediaPipe's hand tracking solution to identify the landmarks (key points) on the user's hand. The final gesture (Rock, Paper, or Scissors) is determined by analyzing the positions of these landmarks.
-
-**Gesture Mapping (To be filled from code):**
-
-  * **Rock:** Defined by... *(e.g., all fingers closed/flexed).*
-  * **Paper:** Defined by... *(e.g., all fingers fully extended).*
-  * **Scissors:** Defined by... *(e.g., the index and middle fingers extended, and others closed).*
-
-### Game Logic
-
-The game logic is handled by a standard conditional system where the computer's choice is randomly generated, and the outcome is decided by comparing the two choices:
-
-```python
-# Pseudo-Code for Determining Winner
-def determine_winner(user_choice, computer_choice):
-    if user_choice == computer_choice:
-        return "Tie"
-    elif (user_choice == 'Paper' and computer_choice == 'Rock') or \
-         (user_choice == 'Rock' and computer_choice == 'Scissors') or \
-         (user_choice == 'Scissors' and computer_choice == 'Paper'):
-        return "User Wins"
-    else:
-        return "Computer Wins"
+```bash
+pip install pyinstaller
+pyinstaller --onefile --console  --name RockPaperScissors-CLI  Rock_Paper_Scissors_Game_CLI/CLI.py
+pyinstaller --onefile --windowed --name RockPaperScissors-GUI  Rock_Paper_Scissors_Game_GUI/GUI.py
+pyinstaller --onefile --console  --name RockPaperScissors-Hand --collect-data mediapipe --collect-binaries mediapipe ^
+  --exclude-module jax --exclude-module jaxlib --exclude-module scipy Rock_Paper_Scissors_Game_hand/main.py
 ```
 
------
+## License
 
-## 📜 License
-
-This project is open source and available under the **MIT License**.
+MIT, see [LICENSE](LICENSE).

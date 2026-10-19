@@ -1,4 +1,4 @@
-import cv2  #For the image capture and put text on the image
+import cv2  #For the image and video processing
 import mediapipe as mp  #For the image hand processing
 import time #For calculate the FPS
 import random #For the computer to get a random choice
@@ -7,7 +7,7 @@ hands = mphands.Hands(min_detection_confidence=0.05, max_num_hands=1)
 mpdraw = mp.solutions.drawing_utils
 handLmsStyle = mpdraw.DrawingSpec(color=(0,0,255),thickness=3)#The style of the hand's 21 landmarks
 handConStyle = mpdraw.DrawingSpec(color=(0,255,0),thickness=1)#The style of the connections of those 21 landmarks
-cap = cv2.VideoCapture(1)#Let the variable cap to be the video capture function of opencv
+cap = cv2.VideoCapture(0)#Let the variable cap to be the video capture function of opencv
 def get_hand__point_position(frame):
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)#Convert the BGR to RGB for processing
     result = hands.process(frame_rgb)#process the image(frame)
@@ -34,7 +34,7 @@ def draw_hand_utils(frame, result):
                 #Show the number of hand landmarks near the hand landmarks location
                 if i == 4 or i == 8 or i == 12 or i == 16 or i == 20:
                     cv2.circle(frame, (xpos, ypos), 7, (0, 255, 255), cv2.FILLED)
-                #Highlight the main detect point by adding a yellow circle above it
+                #Highlight the main detect point by adding a yellow circle above it 
 def getHandMove(result):
     if result.multi_hand_landmarks:
         for handlankmark in result.multi_hand_landmarks:
@@ -117,15 +117,15 @@ result_player_str = 0 #Initials the str type of result of player need to show
 while(True):
     handsign = 0 #Initials the handsign result after the processing of 
     ret, frame = cap.read()  #ret is test is image is read, the frame store the image that captured by the camera
+    if not ret:#Test weather image is read
+        print('Error')
+        break    
     framewidth = 1280#The width of frame to be resized
     frameheight = 720#The height of frame to be resized
     frame = cv2.resize(frame, (framewidth, frameheight)) #resize the frame to the setted value 
     frame = cv2.flip(frame, 1)#Flip the image(laterally invert)for better user experience 
     imageheight = frame.shape[0]#The image height after the image basic processing
     imagewidth = frame.shape[1]#The image width after the image basic processing
-    if not ret:#Test weather image is read
-        print('Error')
-        break
     result_hand_pos_point = get_hand__point_position(frame)#Give the frame to the function and 
     #return the result after the process
     draw_hand_utils(frame, result_hand_pos_point)
