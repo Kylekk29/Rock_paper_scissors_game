@@ -1,6 +1,8 @@
+**English** | [简体中文](README.zh-CN.md)
+
 # Rock Paper Scissors
 
-Three versions of the classic game, from simplest to most advanced. All three are available as ready-to-run Windows programs on the [Releases page](https://github.com/Kylekk29/Rock_paper_scissors_game/releases).
+Three versions of the classic game, from simplest to most advanced. All three are available as ready-to-run Windows programs on the [Releases page](https://github.com/Kylekk29/Rock_Paper_Scissors/releases).
 
 | Folder | Version | Entry point | Windows download |
 |---|---|---|---|
